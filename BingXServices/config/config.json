@@ -1,0 +1,171 @@
+{
+    "region": "eu",
+    "persistence": {
+        "state_file_path": "data/trading_state.json",
+        "state_save_interval_seconds": 300
+    },
+    "webhooks": {
+        "webhook_base_url": null,
+        "listener_port": 5002,
+        "trading_alert": {
+            "path": "/webhook-trading",
+            "secret": null,
+            "enabled": true
+        }
+    },
+    "active_symbols_list": [
+        "BTC-USDT",
+        "ETH-USDT",
+        "SOL-USDT"
+    ],
+    "leverage_map": {
+        "BTC-USDT": 100,
+        "ETH-USDT": 80,
+        "SOL-USDT": 50,
+        "NEIROCTO-USDT": 20,
+        "ETHFI-USDT": 25,
+        "BIGTIME-USDT": 20,
+        "IO-USDT": 20,
+        "GAS-USDT": 25,
+        "1000PEPE-USDT": 25,
+        "EIGEN-USDT": 20,
+        "HIFI-USDT": 20,
+        "PUFFER-USDT": 20,
+        "RENDER-USDT": 25,
+        "FIDA-USDT": 20,
+        "BRETT-USDT": 20,
+        "NEIROETH-USDT": 20
+    },
+    "discarded_symbols_list": [
+        "SOME-BAD-USDT",
+        "ANOTHER-NONOPERABLE-USDT"
+    ],
+    "api": {
+        "api_url": "https://open-api.bingx.com",
+        "market_websocket_url": "wss://open-api-swap.bingx.com/swap-market",
+        "user_websocket_url": "wss://open-api-swap.bingx.com/swap-market",
+        "timeout_seconds": 30
+    },
+    "services": {
+        "trading_service": {
+            "enabled": true,
+            "port": 5002,
+            "adaptive_position_params": {
+                "base_max_positions": 5,
+                "min_positions": 2,
+                "max_positions": 10,
+                "volatility_window": 14,
+                "volatility_lookback": 100,
+                "adjustment_factor": 1.5
+            },
+            "bingx_websocket_params": {
+                "reconnect_delay": 5.0,
+                "max_reconnect_attempts": 10,
+                "order_completion_timeout": 30.0
+            },
+            "trading_params": {
+                "max_simultaneous_trades": 5,
+                "allocation_pct_per_trade": "0.05",
+                "initial_klines_count": 250,
+                "ranking_broadcast_limit": 10,
+                "ranking_limit_factor": 2.5,
+                "test_mode": true,
+                "test_mode_currency": "VST",
+                "batch_size": 5
+            },
+            "ranking_params": {
+                "level_weights": {
+                    "partial_phase": 1.0,
+                    "partial_impulse": 1.5,
+                    "macd_cycle": 2.0,
+                    "total_phase": 1.0,
+                    "total_impulse": 1.5,
+                    "timeframe_slope": 1.0,
+                    "timeframe_distance": 1.0,
+                    "alignment": 2.0,
+                    "default": 1.0
+                },
+                "metrics_config": {
+                    "phase_macd_values_velocidad_total": {
+                        "weight": 1.0,
+                        "optimize": "max"
+                    },
+                    "partial_price_values_media_aceleracion": {
+                        "weight": 1.5,
+                        "optimize": "max"
+                    },
+                    "macd_cycle_price_values_aceleracion": {
+                        "weight": 2.0,
+                        "optimize": "min"
+                    }
+                },
+                "min_symbols_for_topsis_calculation": 5,
+                "num_recommended_symbols": 5,
+                "recommendation_score_threshold": 0.5
+            }
+        },
+        "websocket_service": {
+            "enabled": true,
+            "port": 5001,
+            "log_level": "DEBUG",
+            "websocket_url": "wss://open-api-swap.bingx.com/swap-market",
+            "group_size": 50,
+            "heartbeat_interval": 25,
+            "price_history_len": 300,
+            "min_history_for_ema": 200,
+            "reconnect_timeout": 5,
+            "max_reconnect_delay_seconds": 300,
+            "max_retries": 3,
+            "reconnect_delay": 5,
+            "ping_interval": 30,
+            "kline_timeframes": [
+                "1m",
+                "5m",
+                "15m",
+                "1h",
+                "4h"
+            ],
+            "enable_depth_data": true,
+            "depth_level": 50,
+            "depth_interval": "100ms",
+            "enable_trade_data": true,
+            "connect_timeout": 10,
+            "sock_connect_timeout": 10,
+            "sock_read_timeout": 60,
+            "total_timeout": 60,
+            "connector_limit": 100,
+            "connector_limit_per_host": 20,
+            "max_subscriptions_per_connection": 200,
+            "max_connections_per_ip": 60,
+            "message_rate_limit_per_second": 10,
+            "subscription_batch_size": 20,
+            "subscription_delay_ms": 50,
+            "debug": true
+        },
+        "dashboard_service": {
+            "enabled": true,
+            "port": 5004,
+            "debug": true,
+            "log_level": "DEBUG",
+            "refresh_interval": 1,
+            "max_rankings": 10,
+            "metrics_window": 300,
+            "internal_ws_reconnect_delay": 5,
+            "template_dir": "BingXServices/DashboardService/templates",
+            "static_dir": "BingXServices/DashboardService/static"
+        },
+        "bingx_service": {
+            "port": 5003,
+            "host": "localhost",
+            "websocket_endpoint": "/ws/trading",
+            "events_endpoint": "/ws/events",
+            "health_check_endpoint": "/health",
+            "reconnect_attempts": 5,
+            "reconnect_delay": 2
+        },
+        "log_options": {
+            "compact_payloads": false
+        }
+    },
+    "log_level_app": "INFO"
+}
